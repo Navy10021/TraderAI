@@ -103,9 +103,9 @@ This project leverages financial data, key technical indicators, and deep reinfo
 
 
 ## 🛠️ Future Improvements
-  - 1) Add additional technical indicators (e.g., Bollinger Bands, ATR).
-  - 2) Integrate more diverse datasets and multiple stocks.
-  - 3) Experiment with other RL algorithms (e.g., PPO, A3C).
+  1) Add additional technical indicators (e.g., Bollinger Bands, ATR).
+  2) Integrate more diverse datasets and multiple stocks.
+  3) Experiment with other RL algorithms (e.g., PPO, A3C).
    
 ## 👨‍💻 Contributors
 Seoul National University Graduate School of Data Science (SNU GSDS)
