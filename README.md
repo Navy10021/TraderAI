@@ -71,3 +71,32 @@ This project leverages financial data, key technical indicators, and deep reinfo
   - Evaluate the model by visualizing:
     1) Portfolio value during the prediction phase.
     2) Buy and sell actions overlaid on price trends.
+
+
+## 🏋️‍♂️ Training Results
+### Portfolio Value Over Episodes
+💡 The following graph shows the change in portfolio value during training.
+
+![1](https://github.com/user-attachments/assets/dbcff93b-c20c-4617-977a-8fc21b4427f3)
+
+## 🕵️‍♂️ Prediction Results
+
+### Actions and Prices During Prediction
+  - 🟢 Buy Action (🔼)
+  - 🔴 Sell Action (🔽)
+
+![2](https://github.com/user-attachments/assets/886744b4-3c5e-4ea0-b910-b52ef8e0ea12)
+
+
+## 🛠️ Future Improvements
+  - 1) Add additional technical indicators (e.g., Bollinger Bands, ATR).
+  - 2) Integrate more diverse datasets and multiple stocks.
+  - 3) Experiment with other RL algorithms (e.g., PPO, A3C).
+   
+## 👨‍💻 Contributors
+Seoul National University Graduate School of Data Science (SNU GSDS)
+Under the guidance of Navy Lee
+
+## 📬 Contact
+For any questions or feedback, contact us at:
+📧 iyunseob4@gmail.com or navy10021@snu.ac.kr
