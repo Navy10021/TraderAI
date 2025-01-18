@@ -1,4 +1,4 @@
-# TraderAI: 🚀 Deep Reinforcement Learning for Smarter Investing 💹
+# 💹 TraderAI: Deep Reinforcement Learning for Smarter Investing
 
 Welcome to the **Deep Reinforcement Learning-based Stock Trading Framework**! 
 This project leverages financial data, key technical indicators, and deep reinforcement learning techniques to simulate a robust trading agent that learns to maximize portfolio returns.
