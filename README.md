@@ -49,9 +49,9 @@ This project leverages financial data, key technical indicators, and deep reinfo
 ## 🚀 How It Works
 ### 1️⃣ Data Preprocessing
   - Download stock price data using yfinance (eg.NVIDIA(NVDA)).
-     ```python
+ ```python
    data = get_stock_data('NVDA', start_date='2021-01-01', end_date='2025-01-01')
-  ```
+   ```
   - Calculate key indicators:
     1) Simple Moving Average (SMA): Tracks long-term trends.
     2) Relative Strength Index (RSI): Measures momentum.
@@ -62,6 +62,9 @@ This project leverages financial data, key technical indicators, and deep reinfo
     1) Balance Tracking: Start with $1000.
     2) Transaction Costs: 0.5% cost per trade.
     3) State Representation: Combines past 5 days' data into one state.
+  ```python
+   env = TradingEnv(data, window_size=5)
+   ```
 
 ### 3️⃣ Reinforcement Learning with Policy Networks
   - Two policy network options:
@@ -70,10 +73,18 @@ This project leverages financial data, key technical indicators, and deep reinfo
   - Training Process
     1) Policy gradient method with discounted rewards.
     2) Gradient clipping and entropy regularization for stability.
+  ```python
+   portfolio_values, initial_balance = train(env, policy_net, optimizer)
+   ```
+
 ### 4️⃣ Inference and Visualization
   - Evaluate the model by visualizing:
     1) Portfolio value during the prediction phase.
     2) Buy and sell actions overlaid on price trends.
+  ```python
+   visualize_training(portfolio_values, initial_balance)
+   predict(env, policy_net)
+   ```
 
 
 ## 🏋️‍♂️ Training Results
