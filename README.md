@@ -44,3 +44,30 @@ This project leverages financial data, key technical indicators, and deep reinfo
 
 #### 5. Inference and Visualization
   - Predict portfolio behavior and plot results with easy-to-read graphs.
+
+
+## 🚀 How It Works
+### 1️⃣ Data Preprocessing
+  - Download stock price data using yfinance (eg.NVIDIA(NVDA)).
+  - Calculate key indicators:
+    1) Simple Moving Average (SMA): Tracks long-term trends.
+    2) Relative Strength Index (RSI): Measures momentum.
+    3) Moving Average Convergence Divergence (MACD): Tracks trend changes.
+      
+### 2️⃣ Custom Reinforcement Learning Environment
+  - Simulates realistic trading conditions:
+    1) Balance Tracking: Start with $1000.
+    2) Transaction Costs: 0.5% cost per trade.
+    3) State Representation: Combines past 5 days' data into one state.
+
+### 3️⃣ Reinforcement Learning with Policy Networks
+  - Two policy network options:
+    1) HighPerformancePolicyNetwork 🏋️: Designed for large-scale training.
+    2) SimplePolicyNetwork 🎯: Lightweight and efficient.
+  - Training Process
+    1) Policy gradient method with discounted rewards.
+    2) Gradient clipping and entropy regularization for stability.
+### 4️⃣ Inference and Visualization
+  - Evaluate the model by visualizing:
+    1) Portfolio value during the prediction phase.
+    2) Buy and sell actions overlaid on price trends.
