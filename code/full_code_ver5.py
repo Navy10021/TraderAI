@@ -389,3 +389,9 @@ visualize_training(portfolio_values, initial_balance)
 
 # 추론 실행
 predict(env, policy_net)
+
+# ---------------------------------------------------------
+# Code authored by Navy Lee
+# Purpose: For research and project development
+# Date: 2024-12-00
+# ---------------------------------------------------------
