@@ -99,7 +99,8 @@ This project leverages financial data, key technical indicators, and deep reinfo
   - 🟢 Buy Action (🔼)
   - 🔴 Sell Action (🔽)
 
-![2](https://github.com/user-attachments/assets/886744b4-3c5e-4ea0-b910-b52ef8e0ea12)
+![2](https://github.com/user-attachments/assets/5258f994-928f-4c3c-8cf6-ce7da1e854e7)
+
 
 
 ## 🛠️ Future Improvements
