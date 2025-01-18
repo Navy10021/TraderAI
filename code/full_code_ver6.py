@@ -384,3 +384,9 @@ visualize_training(portfolio_values, initial_balance)
 
 # Run inference
 predict(env, policy_net)
+
+# ---------------------------------------------------------
+# Code authored by Navy Lee
+# Purpose: For research and project development
+# Date: 2024-12-00
+# ---------------------------------------------------------
