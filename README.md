@@ -50,7 +50,7 @@ This project leverages financial data, key technical indicators, and deep reinfo
 ### 1️⃣ Data Preprocessing
   - Download stock price data using yfinance (eg.NVIDIA(NVDA)).
  ```python
-   data = get_stock_data('NVDA', start_date='2021-01-01', end_date='2025-01-01')
+   data = get_stock_data('NVDA', start_date='2022-01-01', end_date='2025-01-01')
    ```
   - Calculate key indicators:
     1) Simple Moving Average (SMA): Tracks long-term trends.
