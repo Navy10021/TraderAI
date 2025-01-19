@@ -359,7 +359,13 @@ def predict(env, policy_net):
         elif action == 1:  # Hold
             plt.scatter(i, prices[i], color='blue', marker='_', s=100, label='Hold' if i == 0 else "")
 
-    # Ensure the legend only shows "Buy", "Sell", and "Hold" once
+    # Add forced labels for clarity
+    plt.scatter([], [], color='green', marker='^', s=100, label='Buy')
+    plt.scatter([], [], color='red', marker='v', s=100, label='Sell')
+    plt.scatter([], [], color='blue', marker='_', s=100, label='Hold')
+    plt.plot([], [], color='black', linewidth=1.5, label='Price (Close)')
+
+    # Ensure the legend only shows unique labels
     handles, labels = plt.gca().get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     plt.legend(by_label.values(), by_label.keys(), fontsize=12)
@@ -367,12 +373,11 @@ def predict(env, policy_net):
     plt.title("Actions and Prices During Prediction", fontsize=16)
     plt.xlabel("Step", fontsize=14)
     plt.ylabel("Price", fontsize=14)
-    plt.legend(fontsize=12)
     plt.grid(True)
 
     plt.tight_layout()
     plt.show()
-    
+
 
 # 6. Training / Inference / Visualization
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -393,3 +398,10 @@ visualize_training(portfolio_values, initial_balance)
 
 # Run inference
 predict(env, policy_net)
+
+
+# ---------------------------------------------------------
+# Code authored by Navy Lee
+# Purpose: For research and project development
+# Date: 2025-01-00
+# ---------------------------------------------------------
