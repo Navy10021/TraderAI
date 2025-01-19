@@ -19,7 +19,7 @@ def get_stock_data(ticker, start_date, end_date):
     return df
 
 # Download stock data
-data = get_stock_data('TSLA', start_date='2022-01-01', end_date='2025-01-01')
+data = get_stock_data('NVDA', start_date='2022-01-01', end_date='2025-01-01')
 
 # Simple Moving Average (SMA)
 data['MA'] = data['Close'].rolling(window=50).mean()
