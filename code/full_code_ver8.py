@@ -392,7 +392,6 @@ def predict(env, policy_net):
     plt.show()
 
 
-# ===============================================================================
 # 6. Training / Inference / Visualization
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
@@ -427,3 +426,10 @@ policy_net.eval()  # Set the model to evaluation mode
 
 # Run inference on test data
 predict(test_env, policy_net)
+
+
+# ---------------------------------------------------------
+# Code authored by Navy Lee
+# Purpose: For research and project development
+# Date: 2025-01-00
+# ---------------------------------------------------------
