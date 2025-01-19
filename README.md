@@ -31,6 +31,7 @@ This project leverages financial data, key technical indicators, and deep reinfo
 
 #### 2. Environment Setup
   - TradingEnv: Custom RL environment for portfolio management.
+  - Actions: Sell, Buy, Hold
 
 #### 3. Policy Networks
 
@@ -80,7 +81,7 @@ This project leverages financial data, key technical indicators, and deep reinfo
 ### 4️⃣ Inference and Visualization
   - Evaluate the model by visualizing:
     1) Portfolio value during the prediction phase.
-    2) Buy and sell actions overlaid on price trends.
+    2) 'Buy', 'Sell' and 'Hold' actions overlaid on price trends.
   ```python
    visualize_training(portfolio_values, initial_balance)
    predict(env, policy_net)
@@ -96,8 +97,9 @@ This project leverages financial data, key technical indicators, and deep reinfo
 ## 🕵️‍♂️ Prediction Results
 
 ### Actions and Prices During Prediction
-  - 🟢 Buy Action (🔼)
-  - 🔴 Sell Action (🔽)
+  - 🟢 Buy Action: (🔼)
+  - 🔴 Sell Action: (🔽)
+  - 🔵 Hold Action: (⏸️)
 
 ![2](https://github.com/user-attachments/assets/5258f994-928f-4c3c-8cf6-ce7da1e854e7)
 
