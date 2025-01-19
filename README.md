@@ -91,8 +91,9 @@ This project leverages financial data, key technical indicators, and deep reinfo
 ## 🏋️‍♂️ Training Results
 ### Portfolio Value Over Episodes
 💡 The following graph shows the change in portfolio value during training.
+![1](https://github.com/user-attachments/assets/a26496eb-274e-47cb-8dcb-e86585770272)
 
-![1](https://github.com/user-attachments/assets/dbcff93b-c20c-4617-977a-8fc21b4427f3)
+
 
 ## 🕵️‍♂️ Prediction Results
 
@@ -100,8 +101,9 @@ This project leverages financial data, key technical indicators, and deep reinfo
   - 🟢 Buy Action: (🔼)
   - 🔴 Sell Action: (🔽)
   - 🔵 Hold Action: (⏸️)
+![2](https://github.com/user-attachments/assets/213233a8-9e01-4f78-a691-38f9617bf65b)
 
-![2](https://github.com/user-attachments/assets/5258f994-928f-4c3c-8cf6-ce7da1e854e7)
+
 
 
 
