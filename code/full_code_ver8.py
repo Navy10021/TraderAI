@@ -19,7 +19,7 @@ def get_stock_data(ticker, start_date, end_date):
     return df
 
 # Download stock data
-data = get_stock_data('NVDA', start_date='2022-01-01', end_date='2025-01-01')
+data = get_stock_data('AAPL', start_date='2023-01-01', end_date='2025-01-01')
 
 # Simple Moving Average (SMA)
 data['MA'] = data['Close'].rolling(window=50).mean()
@@ -90,7 +90,7 @@ class TradingEnv:
         previous_portfolio_value = self.portfolio_value
 
         # **Action Handling**
-        if action == 0:     # Sell
+        if action == 0:  # Sell
             if self.holdings > 0:
                 sell_value = self.holdings * current_price
                 transaction_fee = sell_value * self.transaction_cost
@@ -98,10 +98,7 @@ class TradingEnv:
                 self.balance += reward
                 self.holdings = 0
 
-        elif action == 1:   # Hold
-            reward = 0      # No reward or penalty for holding
-
-        elif action == 2:   # Buy
+        elif action == 2:  # Buy
             buy_amount = self.balance // current_price
             if buy_amount > 0:
                 buy_value = buy_amount * current_price
@@ -131,7 +128,7 @@ class TradingEnv:
 
 
 # 2. Build reinforcement learning models
-# 2-1. Policy Network (ver1)
+# 2-1. Policy Network Model ver1
 class HighPerformancePolicyNetwork(nn.Module):
     def __init__(self, state_dim, action_dim):
         super(HighPerformancePolicyNetwork, self).__init__()
@@ -176,7 +173,7 @@ class HighPerformancePolicyNetwork(nn.Module):
         x = self.fc3(x)
         return self.output_layer(x)
 
-# 2-2. Policy Network (ver2)
+# 2-2. Policy Network Model ver2
 class SimplePolicyNetwork(nn.Module):
     def __init__(self, state_dim, action_dim):
         super(SimplePolicyNetwork, self).__init__()
@@ -229,11 +226,10 @@ def train(env, policy_net, optimizer, gamma=0.99, episodes=500, patience=30):
         epsilon = max(0.01, 1.0 - episode / episodes)  # Exploration rate (decreases over time)
         while not env.done:
             action_probs = policy_net(state)
-
-            if np.random.rand() < epsilon:  # Exploration: Random action
-                action = np.random.choice(3)  # Randomly choose between 0, 1, 2 (sell, hold, buy)
-            else:  # Exploitation: Choose based on policy
-                action = torch.argmax(action_probs).item()
+            if np.random.rand() < epsilon:
+                action = np.random.choice(3)  # Random exploration
+            else:
+                action = torch.argmax(action_probs).item()  # Action based on policy
 
             log_prob = Categorical(action_probs).log_prob(torch.tensor(action))
             log_probs.append(log_prob)
@@ -252,49 +248,53 @@ def train(env, policy_net, optimizer, gamma=0.99, episodes=500, patience=30):
         for reward in reversed(rewards):
             cumulative_reward = reward + gamma * cumulative_reward
             discounted_rewards.insert(0, cumulative_reward)
+        discounted_rewards = torch.FloatTensor(discounted_rewards).to(device)
+        discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / (discounted_rewards.std() + 1e-9)
 
-        # Normalize the discounted rewards
-        discounted_rewards = torch.tensor(discounted_rewards).float().to(device)
-        rewards_tensor = discounted_rewards - discounted_rewards.mean()
+        # Policy gradient loss + entropy regularization
+        entropy_loss = -torch.sum(action_probs * torch.log(action_probs + 1e-9))
+        loss = torch.cat([-log_prob * reward for log_prob, reward in zip(log_probs, discounted_rewards)]).sum()
+        loss = loss + 0.01 * entropy_loss  # Entropy regularization
 
-        # Compute the loss (Policy Gradient)
-        loss = -torch.sum(torch.stack(log_probs) * rewards_tensor)
-
-        # Backpropagation
         optimizer.zero_grad()
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(policy_net.parameters(), max_norm=1.0)  # Gradient clipping
         optimizer.step()
-
         scheduler.step()
 
-        # Check for early stopping based on portfolio value
+        # Update the best model and check early stopping condition
         if env.portfolio_value > best_value:
             best_value = env.portfolio_value
-            best_model_state = policy_net.state_dict()  # Save best model weights
             no_improvement = 0
+            best_model_state = policy_net.state_dict()  # Save model weights
         else:
             no_improvement += 1
 
         if no_improvement >= patience:
-            print(f"Early stopping at episode {episode + 1}")
+            print(f"Early stopping at episode {episode + 1}. Best portfolio value: {best_value:.2f}")
             break
 
-        # Print progress
-        if episode % 10 == 0:
-            print(f"Episode {episode + 1}/{episodes}, Portfolio Value: {env.portfolio_value:.2f}")
+        if (episode + 1) % 10 == 0:
+            print(f"Episode {episode + 1}, Portfolio Value: {env.portfolio_value:.2f}")
 
-    # Load the best model
+    # Load the best model's weights
     if best_model_state:
         policy_net.load_state_dict(best_model_state)
 
-    return portfolio_values, env.initial_balance
+    return portfolio_values, initial_balance
 
 
+# 4. Visualization Function
 def visualize_training(portfolio_values, initial_balance):
     plt.figure(figsize=(10, 6))
-    episodes = range(1, len(portfolio_values) + 1) 
+    episodes = range(1, len(portfolio_values) + 1)
+
+    # Plot portfolio values over episodes
     plt.plot(episodes, portfolio_values, label='Portfolio Value', color='blue', linewidth=2)
+
+    # Highlight the initial balance
     plt.axhline(y=initial_balance, color='red', linestyle='--', label='Initial Balance')
+
     plt.title("Training Results: Portfolio Value Over Episodes", fontsize=16)
     plt.xlabel("Episode", fontsize=14)
     plt.ylabel("Portfolio Value", fontsize=14)
@@ -303,26 +303,7 @@ def visualize_training(portfolio_values, initial_balance):
     plt.show()
 
 
-# 4. Inference: Simulate the Trading Agent
-def test(env, policy_net):
-    state = env.reset()
-    state = torch.FloatTensor(state).unsqueeze(0).to(device)
-
-    portfolio_values = []
-
-    while not env.done:
-        action_probs = policy_net(state)
-        action = torch.argmax(action_probs).item()
-
-        next_state, reward, done = env.step(action)
-        portfolio_values.append(env.portfolio_value)
-
-        state = torch.FloatTensor(next_state).unsqueeze(0).to(device)
-
-    return portfolio_values
-
-
-# 5. Run the training and testing
+# 5. Inference Function : Mark buy (▲), sell (▼), and hold (-) actions
 def predict(env, policy_net):
     # Initialize the environment
     state = env.reset()
@@ -386,50 +367,29 @@ def predict(env, policy_net):
     plt.title("Actions and Prices During Prediction", fontsize=16)
     plt.xlabel("Step", fontsize=14)
     plt.ylabel("Price", fontsize=14)
+    plt.legend(fontsize=12)
     plt.grid(True)
 
     plt.tight_layout()
     plt.show()
-
+    
 
 # 6. Training / Inference / Visualization
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Split data into training and testing
-train_data = data.iloc[:int(len(data) * 0.8)]
-test_data = data.iloc[int(len(data) * 0.8):]
-
-# Initialize environments
-train_env = TradingEnv(train_data, window_size=5)
-test_env = TradingEnv(test_data, window_size=5)
-
+env = TradingEnv(data, window_size=5)
 state_dim = 5 * 6
 action_dim = 3
-
-# Initialize policy network and optimizer
+# policy_net = SimplePolicyNetwork(state_dim, action_dim).to(device)
 policy_net = HighPerformancePolicyNetwork(state_dim, action_dim).to(device)
 optimizer = optim.Adam(policy_net.parameters(), lr=0.001)
 
 # Train the model
-portfolio_values, initial_balance = train(train_env, policy_net, optimizer)
+portfolio_values, initial_balance = train(env, policy_net, optimizer)
 
 # Visualize training
 visualize_training(portfolio_values, initial_balance)
 
-# Save the trained model
-torch.save(policy_net.state_dict(), 'policy_net.pth')
-
-# Load the trained model (optional)
-policy_net.load_state_dict(torch.load('policy_net.pth'))
-policy_net.eval()  # Set the model to evaluation mode
-
-# Run inference on test data
-predict(test_env, policy_net)
-
-
-# ---------------------------------------------------------
-# Code authored by Navy Lee
-# Purpose: For research and project development
-# Date: 2025-01-00
-# ---------------------------------------------------------
+# Run inference
+predict(env, policy_net)
